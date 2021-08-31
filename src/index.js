@@ -7,10 +7,8 @@ app.get('/', (request, response) =>{
 })
 
 app.listen(port, ()=>{
-
     serverLog("success", port)
 })
-
 
 
 const serverLog = (status, port) =>{
