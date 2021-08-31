@@ -19,5 +19,4 @@ const serverLog = (status, port) =>{
     const chalk = require('chalk')
     if(status == "success")
         console.log(chalk.bold('[Molto]:') + ' 백엔드 서버가 성공적으로 구동되었습니다! '+chalk.yellowBright(`(포트:${port})`))
-
 }
