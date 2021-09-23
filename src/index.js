@@ -14,9 +14,13 @@ const db = mysql.createConnection({
 
 db.connect();
 
-db.query('SELECT * from Music', (error, rows, fields) =>{
+const title = "강남스타일"
+const artist = "PSY"
+
+
+db.query(`SELECT * from Music WHERE title='${title}' AND artist='${artist}'`, (error, rows, fields) =>{
     if(error) throw error;
-    console.log('User info is: ', rows);
+    console.log('Music info is: ', rows);
 })
 
 db.end();
