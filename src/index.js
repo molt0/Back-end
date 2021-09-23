@@ -2,6 +2,26 @@ const express = require('express') //import express.js
 const app = express()
 const port = 9090
 
+// INFOMATION OF MySQL
+const mysql      = require('mysql');
+const db = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  port     : '9999',
+  password : 'test',
+  database : 'Molto'
+});
+
+db.connect();
+
+db.query('SELECT * from Music', (error, rows, fields) =>{
+    if(error) throw error;
+    console.log('User info is: ', rows);
+})
+
+db.end();
+
+
 app.get('/', (request, response) =>{
     response.send("Hello Molto!")
 })
