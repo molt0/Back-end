@@ -43,6 +43,9 @@ app.get('/specific/:topicQuery/:typeQuery', (request, response) =>{
         case 'relate':
             type = 'content_relate';
             break;
+        default:
+            response.send("알맞은 Type이 아닙니다")
+            return;
     }
 
     db.query(`SELECT ${type} from Music WHERE title='${title}' AND artist='${artist}'`, (error, rows, fields) =>{
