@@ -18,7 +18,7 @@ db.connect();
 // const artist = "lol"
 
 
-
+//localhost:9090/specific/강남스타일:PSY/lyrics
 app.get('/specific/:topicQuery/:typeQuery', (request, response) =>{
     //아티스트(artist)와 노래(title) 나누기
     const topicDivided = request.params.topicQuery.split(':')
@@ -44,7 +44,7 @@ app.get('/specific/:topicQuery/:typeQuery', (request, response) =>{
             type = 'content_relate';
             break;
         default:
-            response.send("알맞은 Type이 아닙니다")
+            response.sendStatus(404, "알맞은 Type이 아닙니다")
             return;
     }
 
@@ -53,9 +53,12 @@ app.get('/specific/:topicQuery/:typeQuery', (request, response) =>{
     
         if(rows == "")
             console.log("비었다!")
+
         
         console.log('Music info is: ', rows);
-        response.send(rows)
+
+        result = { "title": title, "artist": artist, "content": rows}
+        response.send(JSON.stringify(result))
     })
     
     
