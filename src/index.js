@@ -19,12 +19,11 @@ db.connect();
 
 
 //localhost:9090/specific/강남스타일:PSY/lyrics
-app.get('/specific/:topicQuery/:typeQuery', (request, response) =>{
+app.get('/specific/:title/:artist/:typeQuery', (request, response) =>{
     //아티스트(artist)와 노래(title) 나누기
-    const topicDivided = request.params.topicQuery.split(':')
 
-    const title = topicDivided[0]
-    const artist = topicDivided[1]
+    const title = request.params.title
+    const artist = request.params.artist
     var type;
 
     switch(request.params.typeQuery){
@@ -51,14 +50,19 @@ app.get('/specific/:topicQuery/:typeQuery', (request, response) =>{
     db.query(`SELECT ${type} from Music WHERE title='${title}' AND artist='${artist}'`, (error, rows, fields) =>{
         if(error) throw error;
     
-        if(rows == "")
+        if(rows == ""){
+            result = {"title":title, "artist":artist, "content": false}
+            response.send(JSON.stringify(result))
+            return
+        }
             console.log("비었다!")
 
         
-        console.log('Music info is: ', rows);
 
         result = { "title": title, "artist": artist, "content": rows}
         response.send(JSON.stringify(result))
+
+        console.log('Music info is: ', result);
     })
     
     
