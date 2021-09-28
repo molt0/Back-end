@@ -19,6 +19,7 @@ db.connect();
 
 
 //localhost:9090/specific/강남스타일:PSY/lyrics
+//내용 Get으로 불러올 떄
 app.get('/specific/:title/:artist/:typeQuery', (request, response) =>{
     //아티스트(artist)와 노래(title) 나누기
 
@@ -67,6 +68,9 @@ app.get('/specific/:title/:artist/:typeQuery', (request, response) =>{
     
     
 })
+
+//내용이  POST로 왔을 때
+app.post('specific/')
 
 
 
