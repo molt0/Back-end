@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>User Edit</title>
+</head>
+<body>
+    <h1>업데이트 폼</h1>
+    <form action="/update/<%= user[0].user_id %>" method="POST">
+        user_id <input type="text" name="user_id" value="<%= user[0].user_id %>"><br>
+        password <input type="text" name="password" value="<%= user[0].password %>"><br>
+        name <input type="text" name="user_name" value="<%= user[0].user_name %>"><br>
+        email <input type="text" name="email" value="<%= user[0].email %>"><br>
+        <button type="submit">업데이트</button>
+    </form>
+</body>
+</html>
