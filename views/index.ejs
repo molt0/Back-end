@@ -17,11 +17,11 @@
         </tr>
         <% user.forEach(function (value) {%>
             <tr>
-                <td><%= value.uuid %></td>
-                <td><%= value.user_id %></td>
-                <td><%= value.password %></td>
-                <td><%= value.user_name %></td>
-                <td><%= value.email %></td>
+                <td style="width: 350px"><%= value.uuid %></td>
+                <td style="width: 100px"><%= value.user_id %></td>
+                <td style="width: 100px"><%= value.password %></td>
+                <td style="width: 100px"><%= value.user_name %></td>
+                <td style="width: 100px"><%= value.email %></td>
                 <td><a href="/edit/<%= value.user_id %>">수정</a></td>
                 <td><a href="/delete/<%= value.user_id %>">삭제</a></td>
             </tr>
