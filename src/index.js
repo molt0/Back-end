@@ -14,11 +14,7 @@ const db = mysql.createConnection({
 
 db.connect();
 
-// const title = "강남스타일"
-// const artist = "lol"
 
-
-//localhost:9090/specific/강남스타일:PSY/lyrics
 //내용 Get으로 불러올 떄
 app.get('/specific/:title/:artist/:typeQuery', (request, response) =>{
     //아티스트(artist)와 노래(title) 나누기
@@ -52,15 +48,13 @@ app.get('/specific/:title/:artist/:typeQuery', (request, response) =>{
         if(error) throw error;
     
         if(rows == ""){
-            result = {"title":title, "artist":artist, "content": false}
+            result = {"title":title, "artist":artist, "type": type, "content": false}
             response.send(JSON.stringify(result))
             return
         }
             console.log("비었다!")
 
-        
-
-        result = { "title": title, "artist": artist, "content": rows}
+        result = { "title": title, "artist": artist, 'type':type, "content": rows}
         response.send(JSON.stringify(result))
 
         console.log('Music info is: ', result);
@@ -69,8 +63,12 @@ app.get('/specific/:title/:artist/:typeQuery', (request, response) =>{
     
 })
 
-//내용이  POST로 왔을 때
-app.post('specific/')
+// 내용이  POST로 왔을 때
+app.post('/specific/:title/:artist/:typeQuery', (request, response) =>{
+    //save content!
+})
+
+// 최근 리스트
 
 
 
