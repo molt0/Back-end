@@ -121,7 +121,7 @@ app.get("/specific/:title/:artist/:typeQuery", (request, response) => {
       return;
   }
 
-  db.query(
+  con.query(
     `SELECT ${type} from Music WHERE title='${title}' AND artist='${artist}'`,
     (error, rows, fields) => {
       if (error) throw error;
