@@ -69,8 +69,6 @@ app.post("/add", (req, res) => {
       return;
     }
     console.log("등록 완료");
-    // res.send('등록이 완료 되었습니다.');
-    res.redirect("/login");
   });
 });
 
@@ -176,18 +174,18 @@ app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
 //     });
 // });
 
-// //삭제
-// app.get('/delete/:user_id', (req,res)=>{
-//     const sql = "DELETE FROM users WHERE user_id = ?";
-//     con.query(sql,[req.params.user_id],function(err,result,fields){
-//         if(err) {
-//             res.send(err)
-//             return;
-//         };
-//         console.log(result)
-//         res.redirect('/userinfo');
-//     });
-// });
+ //삭제
+ app.get('/delete/:user_id', (req,res)=>{
+     const sql = "DELETE FROM users WHERE user_id = ?";
+     con.query(sql,[req.params.user_id],function(err,result,fields){
+         if(err) {
+             res.send(err)
+             return;
+         };
+         console.log(result)
+         res.redirect('/userinfo');
+     });
+ });
 
 const serverLog = (runState, dbState, port) => {
   if (dbState == true)
