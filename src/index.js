@@ -28,11 +28,11 @@ let serverState = {
 const mysql = require("mysql2");
 
 const con = mysql.createConnection({
-  host: "test.itsw.info",
-  port: "3306",
-  user: "sw202134",
-  password: "sw202134",
-  database: "sw202134",
+  host: "localhost",
+  port: "9999",
+  user: "root",
+  password: "test",
+  database: "Molto",
 });
 // sw202134
 
@@ -146,7 +146,71 @@ app.get("/specific/:title/:artist/:typeQuery", (request, response) => {
 // 내용이  POST로 왔을 때
 app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
   //save content!
-	const sql = ''
+
+	const title = request.params.title;
+  const artist = request.params.artist;
+  var type;
+
+
+	con.query(`SELECT EXISTS( SELECT * FROM Music WHERE title='${title}' )`, (error, row, fields)=>{
+		if (error) throw error;
+
+		switch (request.params.typeQuery) {
+			case "intro":
+				type = "content_intro";
+				break;
+			case "lyrics":
+				type = "content_lyrics";
+				break;
+			case "info":
+				type = "content_info";
+				break;
+			case "etc":
+				type = "content_etc";
+				break;
+			case "relate":
+				type = "content_relate";
+				break;
+			default:
+				response.sendStatus(404, "알맞은 Type이 아닙니다");
+				return;
+		}
+
+		if(row == 1){
+			console.log("해당 제목을 가진 문서가 존재함")
+			//UPDATE문을 사용 (title과 artist가 params로 들어온거로)
+			con.query(`UPDATE Music SET ${type} = '${request.body}' WHERE title = '${title}' AND artist = '${artist}'`, (error, row) =>{
+				if(error) throw error
+
+				console.log('update: ' + row)
+			})
+		}
+	})
+	
+
+
+	switch (request.body.typeQuery) {
+    case "intro":
+      type = "content_intro";
+      break;
+    case "lyrics":
+      type = "content_lyrics";
+      break;
+    case "info":
+      type = "content_info";
+      break;
+    case "etc":
+      type = "content_etc";
+      break;
+    case "relate":
+      type = "content_relate";
+      break;
+    default:
+      response.sendStatus(404, "알맞은 Type이 아닙니다");
+      return;
+  }
+
+	
 });
 
 // 최근 리스트
