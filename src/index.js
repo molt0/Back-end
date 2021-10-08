@@ -15,6 +15,8 @@ const port = 1004;
 app.use(express.urlencoded());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+
 app.use(cors());
 app.set("view engine", "ejs");
 
@@ -144,6 +146,7 @@ app.get("/specific/:title/:artist/:typeQuery", (request, response) => {
 // 내용이  POST로 왔을 때
 app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
   //save content!
+	const sql = ''
 });
 
 // 최근 리스트
