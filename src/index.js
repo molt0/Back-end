@@ -100,28 +100,10 @@ app.get("/specific/:title/:artist/:typeQuery", (request, response) => {
 
   const title = request.params.title;
   const artist = request.params.artist;
-  var type;
+  const type = request.params.typeQuery;
 
-  switch (request.params.typeQuery) {
-    case "intro":
-      type = "content_intro";
-      break;
-    case "lyrics":
-      type = "content_lyrics";
-      break;
-    case "info":
-      type = "content_info";
-      break;
-    case "etc":
-      type = "content_etc";
-      break;
-    case "relate":
-      type = "content_relate";
-      break;
-    default:
-      response.sendStatus(404, "알맞은 Type이 아닙니다");
-      return;
-  }
+  // if(type === NaN || type === undefined)
+  //   response.status(404).send({ title: title, artist: artist, type: type, content: false })
 
   con.query(
     `SELECT ${type} from Music WHERE title='${title}' AND artist='${artist}'`,
@@ -129,13 +111,13 @@ app.get("/specific/:title/:artist/:typeQuery", (request, response) => {
       if (error) throw error;
 
       if (rows == "") {
-        result = { title: title, artist: artist, type: type, content: false };
+        result = { title: title, artist: artist, type: type, contents: false };
         response.send(JSON.stringify(result));
         return;
       }
       console.log("비었다!");
 
-      result = { title: title, artist: artist, type: type, content: rows };
+      result = { title: title, artist: artist, type: type, contents: rows[0] };
       response.send(JSON.stringify(result));
 
       console.log("Music info is: ", result);
@@ -149,37 +131,19 @@ app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
 
 	const title = request.params.title;
   const artist = request.params.artist;
-  var type;
+  const type = request.params.typeQuery;
+
+  const body = JSON.stringify(request.body.savedContent)
 
 
-	con.query(`SELECT EXISTS( SELECT * FROM Music WHERE title='${title}' )`, (error, row, fields)=>{
+	con.query(`SELECT title FROM Music WHERE title = '${title}' AND artist = '${artist}'`, (error, row, fields)=>{
 		if (error) throw error;
-
-		switch (request.params.typeQuery) {
-			case "intro":
-				type = "content_intro";
-				break;
-			case "lyrics":
-				type = "content_lyrics";
-				break;
-			case "info":
-				type = "content_info";
-				break;
-			case "etc":
-				type = "content_etc";
-				break;
-			case "relate":
-				type = "content_relate";
-				break;
-			default:
-				response.sendStatus(404, "알맞은 Type이 아닙니다");
-				return;
-		}
-
-		if(row == 1){
+    console.log("POST 들어옴")
+		
+		if(row[0].title === title){
 			console.log("해당 제목을 가진 문서가 존재함")
 			//UPDATE문을 사용 (title과 artist가 params로 들어온거로)
-			con.query(`UPDATE Music SET ${type} = '${request.body}' WHERE title = '${title}' AND artist = '${artist}'`, (error, row) =>{
+			con.query(`UPDATE Music SET ${type} = '${body}' WHERE title = '${title}' AND artist = '${artist}'`, (error, row) =>{
 				if(error) throw error
 
 				console.log('update: ' + row)
@@ -189,28 +153,7 @@ app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
 	
 
 
-	switch (request.body.typeQuery) {
-    case "intro":
-      type = "content_intro";
-      break;
-    case "lyrics":
-      type = "content_lyrics";
-      break;
-    case "info":
-      type = "content_info";
-      break;
-    case "etc":
-      type = "content_etc";
-      break;
-    case "relate":
-      type = "content_relate";
-      break;
-    default:
-      response.sendStatus(404, "알맞은 Type이 아닙니다");
-      return;
-  }
 
-	
 });
 
 // 최근 리스트
