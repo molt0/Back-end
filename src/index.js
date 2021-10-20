@@ -113,9 +113,9 @@ app.get("/specific/:title/:artist/:typeQuery", (request, response) => {
       if (rows == "") {
         result = { title: title, artist: artist, type: type, contents: false };
         response.send(JSON.stringify(result));
+        console.log("데이터 없음")
         return;
       }
-      console.log("비었다!");
 
       result = { title: title, artist: artist, type: type, contents: rows[0] };
       response.send(JSON.stringify(result));
@@ -139,8 +139,11 @@ app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
 	con.query(`SELECT title FROM Music WHERE title = '${title}' AND artist = '${artist}'`, (error, row, fields)=>{
 		if (error) throw error;
     console.log("POST 들어옴")
-		
-		if(row[0].title === title){
+    console.log(row)
+
+    if(row === []){
+      console.log('내용이 존재하지 않음')
+    }else if(row[0].title === title){
 			console.log("해당 제목을 가진 문서가 존재함")
 			//UPDATE문을 사용 (title과 artist가 params로 들어온거로)
 			con.query(`UPDATE Music SET ${type} = '${body}' WHERE title = '${title}' AND artist = '${artist}'`, (error, row) =>{
@@ -149,6 +152,9 @@ app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
 				console.log('update: ' + row)
 			})
 		}
+
+
+    
 	})
 	
 
