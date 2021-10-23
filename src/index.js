@@ -3,6 +3,7 @@ const express = require("express"); //import express.js
 const ejs = require("ejs");
 const uuid4 = require("uuid4");
 const chalk = require("chalk");
+const dateTime = require("node-datetime");
 var serveStatic = require("serve-static"); //특정 폴더의 파일들을 특정 패스로 접근할 수 있도록 열어주는 역할
 var cookieParser = require("cookie-parser");
 var expressSession = require("express-session");
@@ -102,9 +103,6 @@ app.get("/specific/:title/:artist/:typeQuery", (request, response) => {
   const artist = request.params.artist;
   const type = request.params.typeQuery;
 
-  // if(type === NaN || type === undefined)
-  //   response.status(404).send({ title: title, artist: artist, type: type, content: false })
-
   con.query(
     `SELECT ${type} from Music WHERE title='${title}' AND artist='${artist}'`,
     (error, rows, fields) => {
@@ -135,14 +133,25 @@ app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
 
   const body = JSON.stringify(request.body.savedContent)
 
+  const defaultRow = '{"time": 1634822925666, "blocks": [{"id": "pYnFEuymaC", "data": {"text": "&nbsp;&nbsp;", "level": 2}, "type": "header"}], "version": "2.22.2"}'
+
 
 	con.query(`SELECT title FROM Music WHERE title = '${title}' AND artist = '${artist}'`, (error, row, fields)=>{
 		if (error) throw error;
     console.log("POST 들어옴")
     console.log(row)
 
-    if(row === []){
-      console.log('내용이 존재하지 않음')
+    if(row.length === 0){
+      console.log('POST - 내용이 존재하지 않음')
+      let dt = dateTime.create()
+      let date = dt.format('Y-m-d H:M:S')
+      con.query(`INSERT INTO Music VALUES( 1, '${title}', '${artist}', '${body}', '${defaultRow}', '${defaultRow}', '${defaultRow}', '${defaultRow}', '${date}', '${date}')`, (error, row, fields)=>{
+		    if (error) throw error;
+        console.log(row)
+        console.log("데이터가 생성됨")
+
+        return;
+      })
     }else if(row[0].title === title){
 			console.log("해당 제목을 가진 문서가 존재함")
 			//UPDATE문을 사용 (title과 artist가 params로 들어온거로)
