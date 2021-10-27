@@ -27,6 +27,7 @@
     "express-session": "^1.17.2",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.0",
+    "node-datetime": "^2.1.2",
     "nodemon": "^2.0.12",
     "path": "^0.12.7",
     "uuid": "^8.3.2",
