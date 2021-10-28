@@ -164,9 +164,38 @@ app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
 app.get("/search/:query", (request, response) => {
   const query = request.params.query;
 
+  
   db.query(
-    `SELECT title, artist FROM Music WHERE title = '${query}'`,
-    (error, row) => {}
+    `SELECT title, artist, updated_at FROM Music WHERE title = '${query}' OR artist = '${query}'`,
+    (error, row) => {
+      if (error) throw error;
+
+      if (row.length === 0){
+        console.log("검색 결과 없음");
+        response.json(({result: false}))
+      }
+      else if(row[0].title === query || row[0].artist === query){
+        let resultArr = []
+
+        for(i=0; i <= row.length-1; i++){
+          let rawDate = JSON.stringify(row[i].updated_at)
+          let resutDate = rawDate.substr(1, 10);
+          console.log(resutDate)
+
+          musicInfo =  {img:"음원_사진", artist: row[i].artist, name: row[i].title, time:200, like:3211, date: resutDate, type:"팝"} 
+          resultArr.push(musicInfo)
+        }
+        console.log(row)
+        console.log(resultArr)
+        response.send({result: resultArr});
+
+      }
+
+
+
+
+      // result = { img: '음원_사진', artist: artist, time: 200, name: title, like: 999, date: "2020-20-20"};
+    }
   );
 });
 
