@@ -88,7 +88,6 @@ app.post("/checkid", function (req, res) {
 // 문서 내용 불러오기
 app.get("/specific/:title/:artist/:typeQuery", (request, response) => {
  
-
   const title = request.params.title;
   const artist = request.params.artist;
   const type = request.params.typeQuery;
@@ -99,18 +98,48 @@ app.get("/specific/:title/:artist/:typeQuery", (request, response) => {
       if (error) throw error;
 
       if (rows == "") {
-        result = { title: title, artist: artist, type: type, contents: false };
+        result = { title: title, artist: artist, type: type, contents: false, };
         response.send(JSON.stringify(result));
         console.log("데이터 없음");
         return;
       }
 
-      result = { title: title, artist: artist, type: type, contents: rows[0] };
+      result = { title: title, artist: artist, type: type, contents: rows[0],};
       response.send(JSON.stringify(result));
       console.log("Music info is: ", result);
     }
   );
 });
+
+//문서 생성 / 수정 날짜 반환 
+app.get("/specific_/log/:title/:artist", (request, response)=>{
+
+  const title = request.params.title;
+  const artist = request.params.artist;
+
+  db.query(
+    `SELECT updated_at, created_at from Music WHERE title='${title}' AND artist='${artist}'`,
+    (error, rows, fields) => {
+      if (error) throw error;
+
+      if (rows == "") {
+        result = {updated_at: false, created_at : false, };
+        response.send(JSON.stringify(result));
+        console.log("로그 없음");
+        return;
+      }
+         
+    let rawUpdateDate = JSON.stringify(rows[0].updated_at)
+    let rawCreateDate = JSON.stringify(rows[0].created_at)
+    let ruDate = rawUpdateDate.substr(1, 10);
+    let rcDate = rawCreateDate.substr(1, 10)
+
+      result = { updated_at: ruDate, created_at: rcDate};
+      response.send(JSON.stringify(result));
+    }
+  );
+
+})
 
 // 내용이  POST로 왔을 때
 app.post("/specific/:title/:artist/:typeQuery", (request, response) => {
