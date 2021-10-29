@@ -23,11 +23,11 @@ let status = {
 
 // DB 정보
 const db = mysql.createConnection({
-  host: "localhost",
-  port: "9999",
-  user: "root",
-  password: "test",
-  database: "Molto",
+  host: "test.itsw.info",
+  port: "3306",
+  user: "sw202134",
+  password: "sw202134",
+  database: "sw202134",
 });
 
 // DB 연결 테스트
@@ -52,7 +52,7 @@ app.get("/userinfo", (req, res) => {
 });
 
 //가입
-app.post("/add", (req, res) => {
+app.post("/register", (req, res) => {
   req.body.uuid = uuid4();
   console.log(req.body);
   const sql = "INSERT INTO users SET ?";
@@ -63,7 +63,9 @@ app.post("/add", (req, res) => {
     }
     console.log("등록 완료");
   });
+  res.redirect("http://localhost:3000/4/login");
 });
+
 
 app.post("/checkid", function (req, res) {
   let user_id = req.body.id;
